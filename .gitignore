@@ -1,0 +1,51 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+dist-packager/
+
+# Electron/VSCode
+*.log
+*.tsbuildinfo
+.vscode/
+.DS_Store
+Thumbs.db
+
+# OS junk
+*.swp
+*.swo
+
+# Environment
+.env
+.env.*
+
+# Installer output
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.zip
+
+# Misc
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ollama/LLMUI
+chats.json
+
+# Electron cache
+.cache/
+
+# Mac system files
+Icon?
+
+# Windows system files
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build scripts
+BUILD.md
+RELEASE.md
+README.md.local

@@ -1,0 +1,61 @@
+{
+  "name": "talk-here",
+  "version": "1.0.0",
+  "description": "A simple chat interface for local LLMs",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win --publish=never",
+    "dist:mac": "electron-builder --mac --publish=never",
+    "dist:linux": "electron-builder --linux --publish=never",
+    "release": "electron-builder --publish=always",
+    "package-win": "electron-packager . \"Talk Here\" --platform=win32 --arch=x64 --out=dist-packager --overwrite --prune=true",
+    "package-mac": "electron-packager . \"Talk Here\" --platform=darwin --arch=x64 --out=dist-packager --overwrite --prune=true",
+    "package-linux": "electron-packager . \"Talk Here\" --platform=linux --arch=x64 --out=dist-packager --overwrite --prune=true"
+  },
+  "keywords": [
+    "electron",
+    "llm",
+    "ollama",
+    "chat",
+    "ai"
+  ],
+  "author": "Uday Rajoriya",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "axios": "^1.5.0"
+  },
+  "build": {
+    "appId": "com.udayrajoriya.talkhere",
+    "productName": "Talk Here",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "dir"
+    },
+    "mac": {
+      "target": "dir"
+    },
+    "linux": {
+      "target": "dir"
+    }
+  }
+}
