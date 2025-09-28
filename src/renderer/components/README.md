@@ -55,12 +55,21 @@ The application uses a component-based architecture where each component has a s
   - Connection status updates
   - Model availability checking
 
+### ⚙️ **ConfigManager.js**
+- **Purpose**: Handles application configuration and settings
+- **Responsibilities**:
+  - Settings UI management (modal display/hide)
+  - Configuration validation and persistence
+  - Ollama connection testing
+  - Application refresh after config changes
+
 ## Component Communication
 
 ```
 ChatApp (Main Orchestrator)
 ├── MessageManager ← StreamingManager
 ├── ModelManager
+├── ConfigManager
 ├── ChatManager ← SidebarManager
 ├── InputManager ← ChatApp
 └── StreamingManager ← MessageManager + InputManager
@@ -72,6 +81,7 @@ ChatApp (Main Orchestrator)
 // Initialize core components first
 this.messageManager = new MessageManager();
 this.modelManager = new ModelManager();
+this.configManager = new ConfigManager();
 
 // Initialize components that depend on others
 this.chatManager = new ChatManager(this.messageManager, sidebarManager);

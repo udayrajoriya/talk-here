@@ -5,6 +5,7 @@ import InputManager from './components/InputManager.js';
 import StreamingManager from './components/StreamingManager.js';
 import ChatManager from './components/ChatManager.js';
 import ModelManager from './components/ModelManager.js';
+import ConfigManager from './components/ConfigManager.js';
 
 /**
  * Main application class that orchestrates all components
@@ -21,6 +22,10 @@ class ChatApp {
         // Initialize core components
         this.messageManager = new MessageManager();
         this.modelManager = new ModelManager();
+        this.configManager = new ConfigManager();
+        
+        // Make config manager available globally for debugging
+        window.debugConfig = this.configManager;
         
         // Initialize chat manager (needs message manager)
         this.chatManager = new ChatManager(this.messageManager, null); // sidebar manager will be set later

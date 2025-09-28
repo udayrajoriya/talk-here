@@ -14,5 +14,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   saveChat: (chatData) => ipcRenderer.invoke('save-chat', chatData),
   loadChats: () => ipcRenderer.invoke('load-chats'),
   deleteChat: (chatId) => ipcRenderer.invoke('delete-chat', chatId),
-  clearAllChats: () => ipcRenderer.invoke('clear-all-chats')
+  clearAllChats: () => ipcRenderer.invoke('clear-all-chats'),
+  
+  // Configuration methods
+  loadConfig: () => ipcRenderer.invoke('load-config'),
+  saveConfig: (config) => ipcRenderer.invoke('save-config', config),
+  testOllamaConnection: (url, timeout) => ipcRenderer.invoke('test-ollama-connection', { url, timeout })
 });

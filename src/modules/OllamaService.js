@@ -4,14 +4,35 @@ const axios = require('axios');
  * Handles communication with Ollama API
  */
 class OllamaService {
-  constructor() {
-    this.baseURL = 'http://127.0.0.1:11434';
+  constructor(configService) {
+    this.configService = configService;
+    this.config = null;
     this.activeStreams = new Map();
+    this.initializeConfig();
+  }
+
+  async initializeConfig() {
+    try {
+      this.config = await this.configService.loadConfig();
+    } catch (error) {
+      console.error('Failed to load config, using defaults:', error);
+      this.config = this.configService.getDefaultConfig();
+    }
+  }
+
+  async ensureConfig() {
+    if (!this.config) {
+      await this.initializeConfig();
+    }
   }
 
   async getModels() {
     try {
-      const response = await axios.get(`${this.baseURL}/api/tags`);
+      await this.ensureConfig();
+      const baseURL = this.config.ollama.url.replace(/\/+$/, ''); // Remove trailing slashes
+      const timeout = this.config.ollama.timeout;
+      
+      const response = await axios.get(`${baseURL}/api/tags`, { timeout });
       return { success: true, models: response.data.models || [] };
     } catch (error) {
       console.error('Failed to fetch models:', error);
@@ -24,16 +45,23 @@ class OllamaService {
 
   async startChatStream(event, { model, messages, streamId }) {
     try {
+      await this.ensureConfig();
+      
       const controller = new AbortController();
       this.activeStreams.set(streamId, controller);
 
-      const response = await axios.post(`${this.baseURL}/api/chat`, {
+      const baseURL = this.config.ollama.url.replace(/\/+$/, ''); // Remove trailing slashes
+      const timeout = this.config.ollama.timeout;
+      const configStreamTimeout = this.config.ollama.streamTimeout;
+
+      const response = await axios.post(`${baseURL}/api/chat`, {
         model: model || 'llama2',
         messages: messages,
         stream: true
       }, {
         responseType: 'stream',
-        signal: controller.signal
+        signal: controller.signal,
+        timeout: timeout
       });
 
       let fullContent = '';
@@ -63,7 +91,7 @@ class OllamaService {
                     streamId: streamId
                   });
                 }
-              }, 2000); // 2 second timeout
+              }, configStreamTimeout);
               
               // Send streaming chunk to renderer
               event.sender.send('ollama-stream-chunk', {
@@ -151,6 +179,10 @@ class OllamaService {
       return { success: true };
     }
     return { success: false, error: 'Stream not found' };
+  }
+
+  async refreshConfig() {
+    await this.initializeConfig();
   }
 }
 

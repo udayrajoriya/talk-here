@@ -4,9 +4,10 @@ const { ipcMain } = require('electron');
  * Sets up IPC handlers for communication between main and renderer processes
  */
 class IPCHandlers {
-  constructor(ollamaService, chatPersistence) {
+  constructor(ollamaService, chatPersistence, configService) {
     this.ollamaService = ollamaService;
     this.chatPersistence = chatPersistence;
+    this.configService = configService;
     this.setupHandlers();
   }
 
@@ -39,6 +40,19 @@ class IPCHandlers {
 
     ipcMain.handle('clear-all-chats', async () => {
       return await this.chatPersistence.clearAllChats();
+    });
+
+    // Configuration handlers
+    ipcMain.handle('load-config', async () => {
+      return await this.configService.loadConfig();
+    });
+
+    ipcMain.handle('save-config', async (event, config) => {
+      return await this.configService.saveConfig(config);
+    });
+
+    ipcMain.handle('test-ollama-connection', async (event, { url, timeout }) => {
+      return await this.configService.testOllamaConnection(url, timeout);
     });
   }
 }

@@ -4,15 +4,17 @@ const { app, BrowserWindow } = require('electron');
 const WindowManager = require('./modules/WindowManager');
 const OllamaService = require('./modules/OllamaService');
 const ChatPersistence = require('./modules/ChatPersistence');
+const ConfigService = require('./modules/ConfigService');
 const IPCHandlers = require('./modules/IPCHandlers');
 
 // Initialize services
 const windowManager = new WindowManager();
-const ollamaService = new OllamaService();
+const configService = new ConfigService();
+const ollamaService = new OllamaService(configService);
 const chatPersistence = new ChatPersistence();
 
 // Set up IPC handlers
-const ipcHandlers = new IPCHandlers(ollamaService, chatPersistence);
+const ipcHandlers = new IPCHandlers(ollamaService, chatPersistence, configService);
 
 // App event handlers
 app.whenReady().then(() => {
