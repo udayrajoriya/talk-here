@@ -31,13 +31,13 @@ class MessageManager {
         }
 
         messages.forEach(message => {
-            this.addMessage(message.role, message.content, false);
+            this.addMessage(message.role, message.content, false, message.attachments);
         });
         
         this.scrollToBottom();
     }
 
-    addMessage(role, content, animate = true) {
+    addMessage(role, content, animate = true, attachments = null) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${role}`;
         
@@ -47,10 +47,17 @@ class MessageManager {
 
         const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+        // Create attachments HTML if present
+        let attachmentsHtml = '';
+        if (attachments && attachments.length > 0) {
+            attachmentsHtml = this.createAttachmentsHtml(attachments);
+        }
+
         messageDiv.innerHTML = `
             <div class="message-avatar">${avatar}</div>
             <div class="message-content">
-                <div class="message-bubble">${this.formatMessage(content)}</div>
+                ${attachmentsHtml}
+                ${content ? `<div class="message-bubble">${this.formatMessage(content)}</div>` : ''}
                 <div class="message-time">${time}</div>
             </div>
         `;
@@ -140,6 +147,60 @@ class MessageManager {
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/`(.*?)`/g, '<code>$1</code>')
             .replace(/\n/g, '<br>');
+    }
+
+    createAttachmentsHtml(attachments) {
+        if (!attachments || attachments.length === 0) return '';
+
+        const attachmentItems = attachments.map(attachment => {
+            if (attachment.isImage) {
+                return `
+                    <div class="message-attachment image-attachment">
+                        <img src="data:${attachment.type};base64,${attachment.data}" 
+                             alt="${attachment.name}" 
+                             class="attachment-image"
+                             title="${attachment.name} (${this.formatFileSize(attachment.size)})" />
+                        <div class="attachment-label">
+                            <i class="fas fa-image"></i>
+                            <span>${attachment.name.length > 12 ? attachment.name.substring(0, 12) + '...' : attachment.name}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const icon = this.getFileIcon(attachment.type);
+                return `
+                    <div class="message-attachment file-attachment">
+                        <div class="attachment-info">
+                            <i class="${icon} attachment-icon"></i>
+                            <div class="attachment-details">
+                                <div class="attachment-name">${attachment.name}</div>
+                                <div class="attachment-meta">${this.formatFileSize(attachment.size)}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }).join('');
+
+        return `<div class="message-attachments">${attachmentItems}</div>`;
+    }
+
+    getFileIcon(type) {
+        if (type === 'application/pdf') return 'fas fa-file-pdf';
+        if (type.includes('word')) return 'fas fa-file-word';
+        if (type === 'text/plain') return 'fas fa-file-alt';
+        if (type === 'application/json') return 'fas fa-file-code';
+        if (type.includes('xml')) return 'fas fa-file-code';
+        if (type === 'text/csv') return 'fas fa-file-csv';
+        return 'fas fa-file';
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
     showError(message) {

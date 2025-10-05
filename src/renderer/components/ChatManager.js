@@ -81,10 +81,15 @@ class ChatManager {
         return this.chats.get(this.currentChatId);
     }
 
-    addMessageToCurrentChat(role, content) {
+    addMessageToCurrentChat(role, content, attachments = null) {
         const chat = this.getCurrentChat();
         if (chat) {
-            const message = { role, content };
+            const message = { 
+                role, 
+                content,
+                attachments: attachments,
+                timestamp: Date.now()
+            };
             chat.messages.push(message);
             return message;
         }

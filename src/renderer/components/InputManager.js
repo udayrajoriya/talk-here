@@ -2,9 +2,10 @@
  * Handles input controls, auto-resize, and user interaction
  */
 class InputManager {
-    constructor(onSendMessage, onStopStream) {
+    constructor(onSendMessage, onStopStream, attachmentManager = null) {
         this.onSendMessage = onSendMessage;
         this.onStopStream = onStopStream;
+        this.attachmentManager = attachmentManager;
         
         this.messageInput = document.getElementById('messageInput');
         this.sendBtn = document.getElementById('sendBtn');
@@ -32,7 +33,11 @@ class InputManager {
     handleInputChange() {
         const length = this.messageInput.value.length;
         this.charCount.textContent = `${length}/4000`;
-        this.sendBtn.disabled = length === 0;
+        
+        // Enable send button if there's text OR attachments
+        const hasText = length > 0;
+        const hasAttachments = this.attachmentManager && this.attachmentManager.hasAttachments();
+        this.sendBtn.disabled = !hasText && !hasAttachments;
     }
 
     handleKeyDown(e) {
@@ -56,10 +61,20 @@ class InputManager {
         this.messageInput.value = '';
         this.handleInputChange();
         this.autoResizeTextarea();
+        
+        // Clear attachments as well
+        if (this.attachmentManager) {
+            this.attachmentManager.clearAttachments();
+        }
     }
 
     getValue() {
         return this.messageInput.value.trim();
+    }
+
+    // Method to refresh send button state (called when attachments change)
+    refreshSendButton() {
+        this.handleInputChange();
     }
 
     toggleStreamingUI(isStreaming) {
@@ -74,7 +89,7 @@ class InputManager {
             this.sendBtn.style.display = 'flex';
             this.stopBtn.style.display = 'none';
             this.messageInput.disabled = false;
-            this.messageInput.placeholder = 'Type your message here...';
+            this.messageInput.placeholder = 'Type your message here or attach files...';
             this.handleInputChange(); // Update send button state
         }
     }

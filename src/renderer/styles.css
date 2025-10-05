@@ -453,6 +453,116 @@ body {
     text-align: left;
 }
 
+/* Message Attachments Styles */
+.message-attachments {
+    margin-bottom: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.message-attachment {
+    border: 1px solid #505050;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #2d2d2d;
+}
+
+.message.user .message-attachment {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.image-attachment {
+    max-width: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.attachment-image {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+}
+
+.attachment-label {
+    padding: 4px 8px;
+    font-size: 10px;
+    color: #b0b0b0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 0 0 4px 4px;
+}
+
+.message.user .attachment-label {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.attachment-size {
+    margin-left: auto;
+    font-size: 10px;
+}
+
+.file-attachment {
+    max-width: 200px;
+    border-radius: 8px;
+}
+
+.file-attachment .attachment-info {
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.file-attachment .attachment-icon {
+    font-size: 18px;
+    color: #667eea;
+    flex-shrink: 0;
+}
+
+.message.user .file-attachment .attachment-icon {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.attachment-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.attachment-name {
+    font-size: 11px;
+    color: #e1e1e1;
+    font-weight: 500;
+    margin-bottom: 1px;
+    word-break: break-all;
+    line-height: 1.2;
+}
+
+.message.user .attachment-name {
+    color: white;
+}
+
+.attachment-meta {
+    font-size: 9px;
+    color: #999;
+    line-height: 1;
+}
+
+.attachment-meta {
+    font-size: 11px;
+    color: #888;
+}
+
+.message.user .attachment-meta {
+    color: rgba(255, 255, 255, 0.7);
+}
+
 /* Streaming/Typing Indicator */
 .typing-indicator {
     animation: blink 1s infinite;
@@ -487,32 +597,201 @@ body {
     transition: max-width 0.3s ease;
 }
 
+.input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    background-color: #363636;
+    border: 1px solid #505050;
+    border-radius: 20px;
+    transition: border-color 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+    border-color: #667eea;
+}
+
+.attach-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    margin: 4px 0 4px 8px;
+    flex-shrink: 0;
+}
+
+.attach-btn:hover {
+    background-color: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
 .sidebar.collapsed ~ .main-content .input-container {
     max-width: 1000px; /* Expand significantly when sidebar is collapsed */
 }
 
 #messageInput {
     flex: 1;
-    padding: 12px 16px;
-    background-color: #363636;
+    padding: 12px 16px 12px 8px;
+    background: transparent;
     color: #e1e1e1;
-    border: 1px solid #505050;
-    border-radius: 20px;
+    border: none;
     font-size: 14px;
     resize: none;
     min-height: 44px;
     max-height: 120px;
     font-family: inherit;
     outline: none;
-    transition: border-color 0.2s ease;
 }
 
 #messageInput:focus {
-    border-color: #667eea;
+    border-color: transparent; /* Focus handled by wrapper */
 }
 
 #messageInput::placeholder {
     color: #888;
+}
+
+/* File Attachments Styles */
+.attachments-preview {
+    max-width: 800px;
+    margin: 0 auto 12px;
+    background-color: #363636;
+    border: 1px solid #505050;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.sidebar.collapsed ~ .main-content .attachments-preview {
+    max-width: 1000px;
+}
+
+.attachments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: #404040;
+    border-bottom: 1px solid #505050;
+}
+
+.attachments-title {
+    font-size: 13px;
+    color: #e1e1e1;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.clear-attachments-btn {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.clear-attachments-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.attachments-list {
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    background-color: #2d2d2d;
+    border: 1px solid #505050;
+    border-radius: 8px;
+    padding: 8px 12px;
+    max-width: 200px;
+    position: relative;
+}
+
+.attachment-icon {
+    color: #667eea;
+    margin-right: 8px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.attachment-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.attachment-name {
+    font-size: 12px;
+    color: #e1e1e1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.attachment-size {
+    font-size: 10px;
+    color: #888;
+}
+
+.attachment-remove {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 2px;
+    margin-left: 8px;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.attachment-remove:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.attachment-preview {
+    width: 32px;
+    height: 32px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+/* Drag and drop styles */
+.input-area.drag-over {
+    background-color: rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
+}
+
+.input-area.drag-over .input-wrapper {
+    border-color: #667eea;
+    background-color: rgba(102, 126, 234, 0.05);
 }
 
 .send-btn {

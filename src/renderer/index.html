@@ -79,13 +79,41 @@
 
             <!-- Input Area -->
             <div class="input-area">
+                <!-- File Attachments Preview -->
+                <div class="attachments-preview" id="attachmentsPreview" style="display: none;">
+                    <div class="attachments-header">
+                        <span class="attachments-title">
+                            <i class="fas fa-paperclip"></i>
+                            Attachments
+                        </span>
+                        <button class="clear-attachments-btn" id="clearAttachmentsBtn" title="Clear all attachments">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="attachments-list" id="attachmentsList">
+                        <!-- Attachment items will be added here dynamically -->
+                    </div>
+                </div>
+                
                 <div class="input-container">
-                    <textarea 
-                        id="messageInput" 
-                        placeholder="Type your message here..." 
-                        rows="1"
-                        maxlength="4000"
-                    ></textarea>
+                    <div class="input-wrapper">
+                        <button class="attach-btn" id="attachBtn" title="Attach files">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Type your message here or attach files..." 
+                            rows="1"
+                            maxlength="4000"
+                        ></textarea>
+                        <input 
+                            type="file" 
+                            id="fileInput" 
+                            style="display: none;" 
+                            multiple
+                            accept="image/*,.pdf,.doc,.docx,.txt,.md,.json,.xml,.csv"
+                        />
+                    </div>
                     <button class="send-btn" id="sendBtn" disabled>
                         <i class="fas fa-paper-plane"></i>
                     </button>
@@ -95,7 +123,7 @@
                 </div>
                 <div class="input-info">
                     <span class="char-count" id="charCount">0/4000</span>
-                    <span class="shortcut-hint">Press Ctrl+Enter to send</span>
+                    <span class="shortcut-hint">Press Ctrl+Enter to send • Drag & drop files to attach</span>
                 </div>
             </div>
         </div>
